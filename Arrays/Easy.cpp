@@ -93,7 +93,7 @@ bool isSorted(int arr[], int n)
 
     return true;
 }
-//Part 2 Check if Array Is Sorted and Rotated
+// ---------- Part 2 Check if Array Is Sorted and Rotated ----------
 bool check(vector<int>& nums) 
 {
     /*TC - O(N)
@@ -108,6 +108,7 @@ bool check(vector<int>& nums)
 
 // ===================================================================================================================================================
 //4. Remove Duplicates in-place from Sorted Array
+// ---------- Optimal Solution ----------
 int removeDuplicates(vector<int>& nums) {
     /*TC - O(N)
       SC - O(1)*/
@@ -146,6 +147,7 @@ void rotate(vector<int>& nums, int k) {
         nums[i] = nums2[i];
     }
 }
+// ---------- Optimal Solution ----------
 void reverse(vector<int>& nums, int start, int end){
     while(start<end){
         swap(nums[start], nums[end]);
