@@ -1,15 +1,16 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-
+// ===================================================================================================================================================
 //1. Find the Largest element in an array
+// ---------- Brute Force ----------
 int sortArr(vector<int>& arr) {
     /*TC - O(NlogN)  for sorting
       SC - O(1)*/
     sort(arr.begin(), arr.end());
     return arr[arr.size() - 1];
 }
-
+// ---------- Optimal Solution ----------
 int findLargestElement(int arr[], int n) {
     /*TC - O(N)
       SC - O(1)*/
@@ -24,7 +25,9 @@ int findLargestElement(int arr[], int n) {
 }
 
 
+// ===================================================================================================================================================
 //2. Find Second Smallest and Second Largest Element in an array
+// ---------- Brute Force ----------
 void getElements(int arr[], int n)
 {    
     /*TC - O(NlogN)  for sorting
@@ -37,6 +40,7 @@ void getElements(int arr[], int n)
     cout << "Second smallest is " << small << endl;
     cout << "Second largest is " << large << endl;
 }
+// ---------- Optimal Solution ----------
 void getElements(int arr[], int n)
 {
     /*TC - O(2N)  for two linear traversals
@@ -61,7 +65,9 @@ void getElements(int arr[], int n)
 }
 
 
+// ===================================================================================================================================================
 //3. Check if an Array is Sorted
+// ---------- Brute Force ----------
 bool isSorted(int arr[], int n) 
 {
     /*TC - O(N²)
@@ -75,6 +81,7 @@ bool isSorted(int arr[], int n)
 
     return true;
 }
+// ---------- Optimal Solution ----------
 bool isSorted(int arr[], int n) 
 {
      /*TC - O(N)
@@ -99,7 +106,7 @@ bool check(vector<int>& nums)
     return count<=1;
 }
 
-
+// ===================================================================================================================================================
 //4. Remove Duplicates in-place from Sorted Array
 int removeDuplicates(vector<int>& nums) {
     /*TC - O(N)
@@ -115,11 +122,12 @@ int removeDuplicates(vector<int>& nums) {
     return k;
 }
 
-
+// ===================================================================================================================================================
 //5. Left Rotate the Array by One
 
-
+// ===================================================================================================================================================
 //6. Rotate array by K elements
+// ---------- Brute Force ----------
 void rotate(vector<int>& nums, int k) {
     /*TC - O(N)
       SC - O(k)*/
@@ -152,3 +160,4 @@ void rotate(vector<int>& nums, int k) {
     reverse(nums, 0, k-1);
     reverse(nums, k, nums.size()-1);
 }
+#pragma endregion
