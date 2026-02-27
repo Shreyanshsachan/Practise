@@ -160,4 +160,3 @@ void rotate(vector<int>& nums, int k) {
     reverse(nums, 0, k-1);
     reverse(nums, k, nums.size()-1);
 }
-#pragma endregion
