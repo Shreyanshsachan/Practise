@@ -87,246 +87,413 @@ int upper(vector<int> nums, int target){
 
 
 // ===================================================================================================================================================
-//4. Remove Duplicates in-place from Sorted Array
+//4. Search Insert Position
 // ---------- Optimal Solution ----------
-int removeDuplicates(vector<int>& nums) {
-    /*TC - O(N)
+int searchInsert(vector<int>& nums, int target) {
+    /*TC - O(logN)
       SC - O(1)*/
-    int k=1;
-    int size = nums.size();
-    for(int i=1;i<size;i++){
-        if(nums[i]!=nums[i-1]){
-            nums[k]=nums[i];
-            k++;
-        }
-    }
-    return k;
-}
-
-// ===================================================================================================================================================
-//5. Left Rotate the Array by One
-
-// ===================================================================================================================================================
-//6. Rotate array by K elements
-// ---------- Brute Force ----------
-void rotate(vector<int>& nums, int k) {
-    /*TC - O(N)
-      SC - O(k)*/
-    vector<int> nums2(nums.size());
-    k=k%nums.size();
-    int j=0;
-    for(int i=nums.size()-k;i<nums.size();i++){
-        nums2[j] = nums[i];
-        j++;
-    }
-    for(int i=0;i<nums.size()-k;i++){
-        nums2[j] = nums[i];
-        j++;
-    }
-    for(int i=0;i<nums.size();i++){
-        nums[i] = nums2[i];
-    }
-}
-// ---------- Optimal Solution ----------
-void reverse(vector<int>& nums, int start, int end){
-    /*TC - O(N)
-    SC - O(k)*/
-    while(start<end){
-        swap(nums[start], nums[end]);
-        start++;
-        end--;
-    }
-}
-void rotate(vector<int>& nums, int k) {
-    int size = nums.size();
-    k=k%size;
-    reverse(nums, 0, nums.size()-1);
-    reverse(nums, 0, k-1);
-    reverse(nums, k, nums.size()-1);
-}
-
-
-// ===================================================================================================================================================
-//7. Move all Zeros to the end of the array
-// ---------- Brute Force ----------
-vector<int> moveZeroes(vector<int>& arr) {
-    /*TC - O(N)
-    SC - O(N)*/
-    vector<int> temp(arr.size(), 0);
-    int index = 0;
-    for (int i = 0; i < arr.size(); i++) {
-        if (arr[i] != 0) {
-            temp[index] = arr[i];
-            index++;
-        }
-    }
-    for (int i = 0; i < arr.size(); i++) {
-        arr[i] = temp[i];
-    }
-    return arr;
-}
-// ---------- Optimal Solution ----------
-void moveZeroes(vector<int>& nums) {
-    /*TC - O(N)
-    SC - O(1)*/
-    int pos=0;
-    for(int i=0;i<nums.size();i++){
-        if(nums[i]!=0){
-            nums[pos]=nums[i];
-            if(i!=pos)
-                nums[i]=0;
-            pos++;
-        }
-    }
-}
-
-
-// ===================================================================================================================================================
-//8. Linear Search
-int linear_search(vector<int>& nums, int k){
-    /*TC - O(N)
-    SC - O(1)*/
-    for(int i=0;i<nums.size();i++){
-        if(nums[i]==k){
-            return i;
-        }
-    }
-    return -1;
-}
-
-
-// ===================================================================================================================================================
-//9. Union of Two Sorted Arrays
-// ---------- Approach 1- Using Map ----------
-vector<int> FindUnion(int arr1[], int arr2[], int n, int m) {
-    /*TC - O( (m+n)log(m+n) )
-    SC - O(m+n)*/
-    map<int, int> freq;
-    vector<int> Union;
-    for (int i = 0; i < n; i++)
-        freq[arr1[i]]++;
-    for (int i = 0; i < m; i++)
-        freq[arr2[i]]++;
-    for (auto &it : freq)
-        Union.push_back(it.first);
-    return Union;
-}
-// ---------- Approach 2- Using Set ----------
-vector<int> findUnion(int arr1[], int arr2[], int n, int m) {
-    /*TC - O( (m+n)log(m+n) )
-    SC - O(m+n)*/
-    set<int> st;
-    for (int i = 0; i < n; i++) {
-        st.insert(arr1[i]);
-    }
-    for (int i = 0; i < m; i++) {
-        st.insert(arr2[i]);
-    }
-    vector<int> unionArr(st.begin(), st.end());
-    return unionArr;
-}
-// ---------- Optimal Approach - Two Pointers ----------
-vector<int> union1(vector<int>& nums, vector<int>& nums1){
-    /*TC - O(m+n)
-    SC - O(1)*/
-    vector<int> res;
-    int i=0,j=0;
-    while(i<nums.size() && j<nums1.size()){
-        if(nums[i]<nums1[j]){
-            if(res.empty() || res.back()!=nums[i]){
-                res.push_back(nums[i]);
-            }
-            i++;
-        }
-        else if(nums[i]>nums1[j]){
-            if(res.empty() || res.back()!=nums1[j]){
-                res.push_back(nums1[j]);
-            }
-            j++;
+    int n=nums.size();
+    int low=0, high=n-1;
+    int ans=n;
+    while(low<=high){
+        int mid=(low+high)/2;
+        if(nums[mid]>=target){
+            ans=mid;
+            high=mid-1;
         }
         else{
-            if(res.empty() || res.back()!=nums[i]){
-                res.push_back(nums[i]);
-            }
-            i++; j++;
+            low=mid+1;
         }
     }
-    while(i<nums.size()){
-        if(res.empty() || res.back()!=nums[i]){
-            res.push_back(nums[i]);
-        }
-        i++;
-    }
-    while(j<nums1.size()){
-        if(res.empty() || res.back()!=nums1[j]){
-            res.push_back(nums1[j]);
-        }
-        j++;
-    }
-    return res;
+    return ans;
 }
 
-
 // ===================================================================================================================================================
-//10. Find the Missing Number
-// ---------- Approach 1- Using Map ----------
+//5. Floor and Ceil in Sorted Array
+// ---------- Ceil Solution ----------
+int ceil(vector<int>& nums, int target) {
+    /*TC - O(logN)
+      SC - O(1)*/
+    int n=nums.size();
+    int low=0, high=n-1;
+    int ans=-1;
+    while(low<=high){
+        int mid=(low+high)/2;
+        if(nums[mid]>=target){
+            ans=nums[mid];
+            high=mid-1;
+        }
+        else{
+            low=mid+1;
+        }
+    }
+    return ans;
+}
 
-
+// ---------- Floor Solution ----------
+int floor(vector<int>& nums, int target) {
+    /*TC - O(logN)
+      SC - O(1)*/
+    int n=nums.size();
+    int low=0, high=n-1;
+    int ans=-1;
+    while(low<=high){
+        int mid=(low+high)/2;
+        if(nums[mid]<=target){
+            ans=nums[mid];
+            low=mid+1;
+        }
+        else{
+            high=mid-1;
+        }
+    }
+    return ans;
+}
 // ===================================================================================================================================================
-//11. Count Maximum Consecutive One's in the array
-int findMaxConsecutiveOnes(vector<int>& nums) {
+//6. Find First and Last Position of Element in Sorted Array
+// ---------- Brute Force ----------
+vector<int> searchRange_brute(vector<int>& nums, int target) {
     /*TC - O(N)
-    SC - O(1)*/
-    int cnt=0;
-    int maxi=0;
-    for(int i=0;i<nums.size();i++){
-        if(nums[i]==1)  cnt++;
-        else    cnt=0;
-        maxi = max(maxi,cnt);
-    }
-    return maxi;
-}
-
-
-// ===================================================================================================================================================
-//12. Find the number that appears once, and the other numbers twice
-// ---------- Brute Force ----------
-int getSingleElement(vector<int>& arr) {
-    /*TC - O(N²)
-    SC - O(1)*/
-    int n = arr.size();
-    for (int i = 0; i < n; i++) {
-        int num = arr[i];
-        int cnt = 0;
-        for (int j = 0; j < n; j++) {
-            if (arr[j] == num)
-                cnt++;
+      SC - O(1)*/
+    int n=nums.size();
+    int first=-1, last=-1;
+    for(int i=0;i<n;i++){
+        if(nums[i]==target){
+            if(first==-1)   first=i;
+            last=i;
         }
-        if (cnt == 1) return num;
     }
-    return -1;
+    return {first, last};
 }
+
+// ---------- Better Solution ----------
+int lower(vector<int> nums, int target){
+    int n=nums.size();
+    int low=0,high=n-1;
+    int ans=n;
+    while(low<=high){
+        int mid=(low+high)/2;
+        if(nums[mid]>=target){
+            ans=mid;
+            high = mid-1;
+        }
+        else{
+            low=mid+1;
+        }
+    }
+    return ans;
+}
+int upper(vector<int> nums, int target){
+    int n=nums.size();
+    int low=0, high=n-1;
+    int ans=n;
+    while(low<=high){
+        int mid=(low+high)/2;
+        if(nums[mid]>target){
+            ans=mid;
+            high=mid-1;
+
+        }
+        else{
+            low=mid+1;
+        }
+    }
+    return ans;
+}
+vector<int> searchRange(vector<int>& nums, int target) {
+    /*TC - O(2*logN)
+      SC - O(1)*/
+    int n=nums.size();
+    int lb = lower(nums, target);
+    if(lb==n || nums[lb]!=target)   return{-1,-1};
+    return {lb, upper(nums, target)-1};
+}
+
 // ---------- Optimal Solution ----------
-int getSingleElement(vector<int>& arr) {
-    /*TC - O(N) + O(N) + O(N)
-    SC - O(1)*/
-    int n = arr.size();
-    int maxi = arr[0];
-    for (int i = 0; i < n; i++) {
-        maxi = max(maxi, arr[i]);
+int firstoccur(vector<int>& nums, int n, int target){
+    int low=0, high=n-1, first=-1;
+    while(low<=high){
+        int mid=(low+high)/2;
+        if(nums[mid]==target){
+            first=mid;
+            high=mid-1;
+        }
+        else if(nums[mid]<target){
+            low=mid+1;
+        }
+        else{
+            high=mid-1;
+        }
     }
-    vector<int> hash(maxi + 1, 0);
-    for (int i = 0; i < n; i++) {
-        hash[arr[i]]++;
+    return first;
+}
+int secondoccur(vector<int>& nums, int n, int target){
+    int low=0, high=n-1, second=-1;
+    while(low<=high){
+        int mid=(low+high)/2;
+        if(nums[mid]==target){
+            second=mid;
+            low=mid+1;
+        }
+        else if(nums[mid]<target){
+            low=mid+1;
+        }
+        else{
+            high=mid-1;
+        }
     }
-    for (int i = 0; i < n; i++) {
-        if (hash[arr[i]] == 1)
-            return arr[i];
+    return second;
+}
+vector<int> searchRange(vector<int>& nums, int target) {
+    /*TC - O(2*logN)
+      SC - O(1)*/
+    int n=nums.size();
+    int first = firstoccur(nums, n, target);
+    if(first==-1)   return{-1,-1};
+    int second = secondoccur(nums, n, target);
+    return {first, second};
+}
+// ===================================================================================================================================================
+//7. Count Occurrences in Sorted Array
+// ---------- Optimal Solution ----------
+int firstoccur(vector<int>& nums, int n, int target){
+    int low=0, high=n-1, first=-1;
+    while(low<=high){
+        int mid=(low+high)/2;
+        if(nums[mid]==target){
+            first=mid;
+            high=mid-1;
+        }
+        else if(nums[mid]<target){
+            low=mid+1;
+        }
+        else{
+            high=mid-1;
+        }
+    }
+    return first;
+}
+int secondoccur(vector<int>& nums, int n, int target){
+    int low=0, high=n-1, second=-1;
+    while(low<=high){
+        int mid=(low+high)/2;
+        if(nums[mid]==target){
+            second=mid;
+            low=mid+1;
+        }
+        else if(nums[mid]<target){
+            low=mid+1;
+        }
+        else{
+            high=mid-1;
+        }
+    }
+    return second;
+}
+int cout_occur_optimal(vector<int>& nums, int target){
+    /*TC - O(2*logN)
+      SC - O(1)*/
+    int n=nums.size();
+    int first = firstoccur(nums, n, target);
+    int second = secondoccur(nums, n, target);
+    return (second-first+1);
+}
+
+
+// ===================================================================================================================================================
+//8. Search Element in a Rotated Sorted Array
+int search(vector<int>& nums, int target) {
+    /*TC - O(logN)
+      SC - O(1)*/
+    int n=nums.size();
+    int low=0, high=n-1;
+    while(low<=high){
+        int mid=(low+high)/2;
+        if(nums[mid]==target) return mid;
+        if(nums[low]<=nums[mid]){
+            if(nums[low]<=target && nums[mid]>=target){
+                high=mid-1;
+            }
+            else    low=mid+1;
+        }
+        else{
+            if(nums[mid]<=target && nums[high]>=target){
+                low=mid+1;
+            }
+            else    high=mid-1;
+        }
     }
     return -1;
 }
 
 
 // ===================================================================================================================================================
-//13. Longest Subarray with given Sum K(Positives)
+//9. Search Element in a Rotated Sorted Array II (Duplicates)
+bool search_II(vector<int>& nums, int target) {
+    /*TC - O(logN)
+      SC - O(1)*/
+    int n=nums.size();
+    int low=0, high=n-1;
+    while(low<=high){
+        int mid=(low+high)/2;
+        if(nums[mid]==target)   return true;
+        if(nums[low]==nums[mid] && nums[mid]==nums[high]){
+            low=low+1;
+            high=high-1;
+            continue;
+        }
+        if(nums[low]<=nums[mid]){
+            if(nums[low]<=target && nums[mid]>=target){
+                high=mid-1;
+            }
+            else{
+                low=mid+1;
+            }
+        }
+        else{
+            if(nums[mid]<=target && nums[high]>=target){
+                low=mid+1;
+            }
+            else{
+                high=mid-1;
+            }
+        }
+    }
+    return false;
+}
+
+// ===================================================================================================================================================
+//10. Minimum in Rotated Sorted Array
+int findMin(vector<int>& nums) {
+    /*TC - O(logN)
+      SC - O(1)*/
+    int n=nums.size();
+    int low=0, high=n-1;
+    int ans=INT_MAX;
+    while(low<=high){
+        int mid=(low+high)/2;
+        if(nums[low]<=nums[high]){
+            ans=min(ans,nums[low]);
+            break;
+        }
+        if(nums[low]<=nums[mid]){
+            ans=min(ans, nums[low]);
+            low=mid+1;
+        }
+        else{
+            ans=min(ans, nums[mid]);
+            high=mid-1;
+        }
+    }
+    return ans;
+}
+
+
+// ===================================================================================================================================================
+//11. Find out how many times the array has been rotated
+// Just find the smallest value, return its index, which will the result.
+int findRotations(vector<int>& nums) {
+    /*TC - O(logN)
+      SC - O(1)*/
+    int n=nums.size();
+    int low=0, high=n-1;
+    int ans=INT_MAX, index=-1;
+    while(low<=high){
+        int mid=(low+high)/2;
+        if(nums[low]<=nums[high]){
+            if(nums[low]<ans){
+                ans=nums[low];
+                index=low;
+            }
+        }
+        if(nums[low]<=nums[mid]){
+            if(nums[low]<ans){
+                ans=nums[low];
+                index=low;
+            }
+            low=mid+1;
+        }
+        else{
+            if(nums[mid]<ans){
+                ans=nums[mid];
+                index=mid;
+            }
+            high=mid-1;
+        }
+    }
+    return index;
+}
+
+
+// ===================================================================================================================================================
+//12. Search Single Element in a sorted array
 // ---------- Brute Force ----------
+int singleNonDuplicate(vector<int>& nums) {
+    /*TC - O(N)
+      SC - O(1)*/
+    int n=nums.size();
+    if(n==1)    return nums[0];
+    for(int i=0;i<n;i++){
+        if(i==0 && nums[i]!=nums[i+1]) return nums[i];
+        else if(i==n-1 && nums[i]!=nums[n-2]) return nums[i];
+        else{
+            if(nums[i]!=nums[i+1] && nums[i]!=nums[i-1])    return nums[i];
+        }
+    }
+    return -1;
+}
+
+// ---------- Optimal Solution ----------
+int singleNonDuplicate_optimal(vector<int>& nums) {
+    /*TC - O(logN)
+      SC - O(1)*/
+    int n=nums.size();
+    if(n==1)    return nums[0];
+    if(nums[0]!=nums[1])  return nums[0];
+    if(nums[n-1]!=nums[n-2])    return nums[n-1];
+    int low=1,high=n-2;
+    while(low<=high){
+        int mid=(low+high)/2;
+        if(nums[mid]!=nums[mid-1] && nums[mid]!=nums[mid+1])    return nums[mid];
+        if(mid%2==1 && nums[mid]==nums[mid-1] || mid%2==0 && nums[mid]==nums[mid+1]){
+            low=mid+1;
+        }
+        else{
+            high=mid-1;
+        }
+    }
+    return -1;
+}
+
+
+// ===================================================================================================================================================
+//13. Find Peak Element
+// ---------- Brute Force ----------
+int findPeakElement(vector<int>& nums) {
+    /*TC - O(N)
+      SC - O(1)*/
+    int n=nums.size();
+    for(int i=0;i<n;i++){
+        if((i==0 || nums[i]>nums[i-1]) && (i==n-1 || nums[i]>nums[i+1]))    return i;
+    }
+    return -1;
+}
+
+// ---------- Optimal Solution ----------
+int findPeakElement(vector<int>& nums) {
+    /*TC - O(logN)
+      SC - O(1)*/
+    int n=nums.size();
+    if(n==1)    return 0;
+    if(nums[0]>nums[1]) return 0;
+    if(nums[n-1]>nums[n-2]) return n-1;
+    int low=1, high=n-2;
+    while(low<=high){
+        int mid=(low+high)/2;
+        if(nums[mid]>nums[mid-1] && nums[mid]>nums[mid+1])  return mid;
+        else if(nums[mid]>nums[mid-1])   low=mid+1;
+        else if(nums[mid]>nums[mid+1])   high=mid-1;
+        else   low=mid+1;
+    }
+    return -1;
+}
