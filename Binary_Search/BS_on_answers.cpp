@@ -2,65 +2,70 @@
 using namespace std;
 
 // ===================================================================================================================================================
-//1. Search X in sorted array
-// ---------- Iterative Solution ----------
-int search_iter(vector<int>& nums, int target) {
-    /*TC - O(logN)
+//1. Find square root of a number
+// ---------- Brute Solution ----------
+int floorSqrt_better(int n) {
+    /*TC - O(N)
       SC - O(1)*/
-    int n=nums.size();
-    int low=0,high=n-1;
-    while(low<=high){
-        int mid=(low+high)/2;
-        if(nums[mid]==target) return mid;
-        else if(nums[mid] < target)   low=mid+1;
-        else high=mid-1;
-    }
-    return -1;
-}
-
-// ---------- Recursive Solution ----------
-int recur(vector<int>& nums, int target, int low, int high){
-    /*TC - O(logN)
-      SC - O(1)*/
-    int n=nums.size();
-    if(low>high)    return -1;
-    int mid = low + (high-low)/2;
-    if(nums[mid]==target)   return mid;
-    else if(nums[mid] < target) return recur(nums, target, mid+1, high);
-    else return recur(nums, target, low, mid-1);
-}
-int searchh(vector<int>& nums, int target) {
-    return recur(nums, target, 0, nums.size()-1);
-}
-
-
-// ===================================================================================================================================================
-//2. Implement Lower Bound
-// ---------- Solution ----------
-int lower(vector<int> nums, int target){
-    /*TC - O(logN)
-      SC - O(1)*/
-    int n=nums.size();
-    int low=0,high=n-1;
-    int ans=n;
-    while(low<=high){
-        int mid=(low+high)/2;
-        if(nums[mid]>=target){
-            ans=mid;
-            high = mid-1;
-        }
-        else{
-            low=mid+1;
+    int ans = 0;
+    for (int i = 1; i <= n; i++) {
+        if ((long long)i * i <= n) {
+            ans = i;
+        } else {
+            break;
         }
     }
     return ans;
 }
 
 // ---------- Optimal Solution ----------
-auto lower_optional(vector<int> nums, int target){
-    int n=nums.size();
-    int it = lower_bound(nums.begin(),nums.end(), target) - nums.begin();
-    return it;
+int floorSqrt_optimal(int n) {
+    /*TC - O(logN)
+      SC - O(1)*/
+    int low=1, high=n;
+    while(low<=high){
+        int mid=(low+high)/2;
+        if((mid*mid) > n)   high = mid-1;
+        else    low = mid+1;
+    }
+    return high;
+}
+
+
+// ===================================================================================================================================================
+//2. Nth Root of a Number using Binary Search
+// ---------- Brute Solution ----------
+int nthRoot(int n, int m) {
+    /*TC - O(M)
+      SC - O(1)*/
+    for(int i=1;i<m;i++){
+        if(pow(i,n)==m) return i;
+        else if(pow(i,n)>m)break;
+    }
+    return -1;
+}
+
+// ---------- Optimal Solution ----------
+int powerr(int mid, int n, int m){
+    long long ans=1;
+    for(int i=1;i<=n;i++){
+        ans = ans*mid;
+        if(ans>m)   return 2;
+    }
+    if(ans==m)  return 1;
+    return 0;
+}
+int nthRoot_optimal(int n, int m) {
+    int low=1;
+    int high=m;
+    while(low<=high){
+        int mid=(low+high)/2;
+        int power = powerr(mid, n, m);
+        if(power==1)    return mid;
+        else if(power==0)   low=mid+1;
+        else    high=mid-1;
+    }
+    return -1;
 }
 
 
