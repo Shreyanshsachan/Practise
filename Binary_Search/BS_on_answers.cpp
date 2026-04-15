@@ -56,6 +56,8 @@ int powerr(int mid, int n, int m){
     return 0;
 }
 int nthRoot_optimal(int n, int m) {
+    /*TC - O(N*logM)
+      SC - O(1)*/
     int low=1;
     int high=m;
     while(low<=high){
@@ -70,30 +72,57 @@ int nthRoot_optimal(int n, int m) {
 
 
 // ===================================================================================================================================================
-//3. Implement Upper Bound
-int upper(vector<int> nums, int target){
-    /*TC - O(logN)
-      SC - O(1)*/
+//3. Koko Eating Bananas
+// ---------- Brute Solution [Time Limit Exceeded]----------
+int total_hr(vector<int>& nums, int h){
+    int ans=0;
     int n=nums.size();
-    int low=0, high=n-1;
-    int ans=n;
+    for(int i=0;i<n;i++){
+        int sum=ceil(nums[i]/h);
+        ans+=sum;
+    }
+    return ans;
+}
+int minEatingSpeed(vector<int>& piles, int h) {
+    /*TC - O(N*logN)
+      SC - O(1)*/
+    auto it = max_element(piles.begin(),piles.end());
+    int max_hr = *it;
+    for(int i=1;i<=max_hr;i++){
+        int total = total_hr(piles, i);
+        if(total<h) return i;
+    }
+    return -1;
+}
+
+// ---------- Optimal Solution ----------
+long long totalhr(vector<int>& piles, int hr){
+    long long sum=0;
+    for(int i=0;i<piles.size();i++) {
+        sum += ( (long long)piles[i] + hr - 1 ) / hr;
+    }
+    return sum;
+}
+int minEatingSpeed(vector<int>& piles, int h) {
+    /*TC - O(N*log(max element of piles))
+      SC - O(1)*/
+    auto it = max_element(piles.begin(), piles.end());
+    int max_hr = *it;
+    int low=1, high=max_hr;
     while(low<=high){
         int mid=(low+high)/2;
-        if(nums[mid]>target){
-            ans=mid;
+        long total_hr = totalhr(piles, mid);
+        if(total_hr<=h){
             high=mid-1;
-
         }
         else{
             low=mid+1;
         }
     }
-    return ans;
+    return low;
 }
-
-
 // ===================================================================================================================================================
-//4. Search Insert Position
+//4. Minimum days to make M bouquets
 int searchInsert(vector<int>& nums, int target) {
     /*TC - O(logN)
       SC - O(1)*/
