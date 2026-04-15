@@ -17,6 +17,7 @@ int search_iter(vector<int>& nums, int target) {
     }
     return -1;
 }
+
 // ---------- Recursive Solution ----------
 int recur(vector<int>& nums, int target, int low, int high){
     /*TC - O(logN)
@@ -54,6 +55,7 @@ int lower(vector<int> nums, int target){
     }
     return ans;
 }
+
 // ---------- Optimal Solution ----------
 auto lower_optional(vector<int> nums, int target){
     int n=nums.size();
@@ -64,7 +66,6 @@ auto lower_optional(vector<int> nums, int target){
 
 // ===================================================================================================================================================
 //3. Implement Upper Bound
-// ---------- Brute Force ----------
 int upper(vector<int> nums, int target){
     /*TC - O(logN)
       SC - O(1)*/
@@ -88,7 +89,6 @@ int upper(vector<int> nums, int target){
 
 // ===================================================================================================================================================
 //4. Search Insert Position
-// ---------- Optimal Solution ----------
 int searchInsert(vector<int>& nums, int target) {
     /*TC - O(logN)
       SC - O(1)*/
@@ -107,6 +107,7 @@ int searchInsert(vector<int>& nums, int target) {
     }
     return ans;
 }
+
 
 // ===================================================================================================================================================
 //5. Floor and Ceil in Sorted Array
@@ -149,6 +150,8 @@ int floor(vector<int>& nums, int target) {
     }
     return ans;
 }
+
+
 // ===================================================================================================================================================
 //6. Find First and Last Position of Element in Sorted Array
 // ---------- Brute Force ----------
@@ -253,6 +256,8 @@ vector<int> searchRange(vector<int>& nums, int target) {
     int second = secondoccur(nums, n, target);
     return {first, second};
 }
+
+
 // ===================================================================================================================================================
 //7. Count Occurrences in Sorted Array
 // ---------- Optimal Solution ----------
@@ -361,6 +366,7 @@ bool search_II(vector<int>& nums, int target) {
     }
     return false;
 }
+
 
 // ===================================================================================================================================================
 //10. Minimum in Rotated Sorted Array
