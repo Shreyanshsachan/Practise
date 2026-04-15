@@ -55,70 +55,36 @@ int lower(vector<int> nums, int target){
     return ans;
 }
 // ---------- Optimal Solution ----------
-void getElements(int arr[], int n)
-{
-    /*TC - O(2N)  for two linear traversals
-      SC - O(1)*/
-    if (n == 0 || n == 1)
-        cout << -1 << " " << -1 << endl;
-    int small = INT_MAX, second_small = INT_MAX;
-    int large = INT_MIN, second_large = INT_MIN;
-    int i;
-    for (i = 0; i < n; i++) {
-        small = min(small, arr[i]);
-        large = max(large, arr[i]);
-    }
-    for (i = 0; i < n; i++) {
-        if (arr[i] < second_small && arr[i] != small)
-            second_small = arr[i];
-        if (arr[i] > second_large && arr[i] != large)
-            second_large = arr[i];
-    }
-    cout << "Second smallest is " << second_small << endl;
-    cout << "Second largest is " << second_large << endl;
+auto lower_optional(vector<int> nums, int target){
+    int n=nums.size();
+    int it = lower_bound(nums.begin(),nums.end(), target) - nums.begin();
+    return it;
 }
 
 
 // ===================================================================================================================================================
-//3. Check if an Array is Sorted
+//3. Implement Upper Bound
 // ---------- Brute Force ----------
-bool isSorted(int arr[], int n) 
-{
-    /*TC - O(N²)
+int upper(vector<int> nums, int target){
+    /*TC - O(logN)
       SC - O(1)*/
-    for (int i = 0; i < n; i++) {
-        for (int j = i + 1; j < n; j++) {
-            if (arr[j] < arr[i]) 
-                return false;
+    int n=nums.size();
+    int low=0, high=n-1;
+    int ans=n;
+    while(low<=high){
+        int mid=(low+high)/2;
+        if(nums[mid]>target){
+            ans=mid;
+            high=mid-1;
+
+        }
+        else{
+            low=mid+1;
         }
     }
+    return ans;
+}
 
-    return true;
-}
-// ---------- Optimal Solution ----------
-bool isSorted(int arr[], int n) 
-{
-     /*TC - O(N)
-      SC - O(1)*/
-    for (int i = 1; i < n; i++) {
-        if (arr[i] < arr[i - 1])
-            return false;
-    }
-
-    return true;
-}
-// ---------- Part 2 Check if Array Is Sorted and Rotated ----------
-bool check(vector<int>& nums) 
-{
-    /*TC - O(N)
-      SC - O(1)*/
-    int count=0;
-    int size = nums.size();
-    for(int i=0;i<size;i++){
-        if(nums[i]>nums[(i+1)%size])    count++;
-    }
-    return count<=1;
-}
 
 // ===================================================================================================================================================
 //4. Remove Duplicates in-place from Sorted Array
