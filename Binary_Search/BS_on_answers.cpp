@@ -84,7 +84,7 @@ int total_hr(vector<int>& nums, int h){
     return ans;
 }
 int minEatingSpeed(vector<int>& piles, int h) {
-    /*TC - O(N*logN)
+    /*TC - O(N*max(piles)
       SC - O(1)*/
     auto it = max_element(piles.begin(),piles.end());
     int max_hr = *it;
@@ -123,246 +123,268 @@ int minEatingSpeed(vector<int>& piles, int h) {
 }
 // ===================================================================================================================================================
 //4. Minimum days to make M bouquets
-int searchInsert(vector<int>& nums, int target) {
-    /*TC - O(logN)
+// ---------- Brute Solution [Time Limit Exceeded]----------
+bool possible(vector<int>& bloomDay, int m, int k, int day){
+    int cnt=0;
+    int ans=0;
+    for(int i=0;i<bloomDay.size();i++){
+        if(bloomDay[i]<=day){
+            cnt++;
+        }
+        else{
+            ans+=cnt/k;
+            cnt=0;
+        }
+    }
+    ans+=cnt/k;
+    if(ans>=m)  return true;
+    return false;
+}
+int minDays(vector<int>& bloomDay, int m, int k) {
+    /*TC - O(N*(maxi-mini+1)
       SC - O(1)*/
-    int n=nums.size();
-    int low=0, high=n-1;
-    int ans=n;
-    while(low<=high){
-        int mid=(low+high)/2;
-        if(nums[mid]>=target){
-            ans=mid;
-            high=mid-1;
-        }
-        else{
-            low=mid+1;
-        }
-    }
-    return ans;
-}
-
-
-// ===================================================================================================================================================
-//5. Floor and Ceil in Sorted Array
-// ---------- Ceil Solution ----------
-int ceil(vector<int>& nums, int target) {
-    /*TC - O(logN)
-      SC - O(1)*/
-    int n=nums.size();
-    int low=0, high=n-1;
-    int ans=-1;
-    while(low<=high){
-        int mid=(low+high)/2;
-        if(nums[mid]>=target){
-            ans=nums[mid];
-            high=mid-1;
-        }
-        else{
-            low=mid+1;
-        }
-    }
-    return ans;
-}
-
-// ---------- Floor Solution ----------
-int floor(vector<int>& nums, int target) {
-    /*TC - O(logN)
-      SC - O(1)*/
-    int n=nums.size();
-    int low=0, high=n-1;
-    int ans=-1;
-    while(low<=high){
-        int mid=(low+high)/2;
-        if(nums[mid]<=target){
-            ans=nums[mid];
-            low=mid+1;
-        }
-        else{
-            high=mid-1;
-        }
-    }
-    return ans;
-}
-
-
-// ===================================================================================================================================================
-//6. Find First and Last Position of Element in Sorted Array
-// ---------- Brute Force ----------
-vector<int> searchRange_brute(vector<int>& nums, int target) {
-    /*TC - O(N)
-      SC - O(1)*/
-    int n=nums.size();
-    int first=-1, last=-1;
-    for(int i=0;i<n;i++){
-        if(nums[i]==target){
-            if(first==-1)   first=i;
-            last=i;
-        }
-    }
-    return {first, last};
-}
-
-// ---------- Better Solution ----------
-int lower(vector<int> nums, int target){
-    int n=nums.size();
-    int low=0,high=n-1;
-    int ans=n;
-    while(low<=high){
-        int mid=(low+high)/2;
-        if(nums[mid]>=target){
-            ans=mid;
-            high = mid-1;
-        }
-        else{
-            low=mid+1;
-        }
-    }
-    return ans;
-}
-int upper(vector<int> nums, int target){
-    int n=nums.size();
-    int low=0, high=n-1;
-    int ans=n;
-    while(low<=high){
-        int mid=(low+high)/2;
-        if(nums[mid]>target){
-            ans=mid;
-            high=mid-1;
-
-        }
-        else{
-            low=mid+1;
-        }
-    }
-    return ans;
-}
-vector<int> searchRange(vector<int>& nums, int target) {
-    /*TC - O(2*logN)
-      SC - O(1)*/
-    int n=nums.size();
-    int lb = lower(nums, target);
-    if(lb==n || nums[lb]!=target)   return{-1,-1};
-    return {lb, upper(nums, target)-1};
-}
-
-// ---------- Optimal Solution ----------
-int firstoccur(vector<int>& nums, int n, int target){
-    int low=0, high=n-1, first=-1;
-    while(low<=high){
-        int mid=(low+high)/2;
-        if(nums[mid]==target){
-            first=mid;
-            high=mid-1;
-        }
-        else if(nums[mid]<target){
-            low=mid+1;
-        }
-        else{
-            high=mid-1;
-        }
-    }
-    return first;
-}
-int secondoccur(vector<int>& nums, int n, int target){
-    int low=0, high=n-1, second=-1;
-    while(low<=high){
-        int mid=(low+high)/2;
-        if(nums[mid]==target){
-            second=mid;
-            low=mid+1;
-        }
-        else if(nums[mid]<target){
-            low=mid+1;
-        }
-        else{
-            high=mid-1;
-        }
-    }
-    return second;
-}
-vector<int> searchRange(vector<int>& nums, int target) {
-    /*TC - O(2*logN)
-      SC - O(1)*/
-    int n=nums.size();
-    int first = firstoccur(nums, n, target);
-    if(first==-1)   return{-1,-1};
-    int second = secondoccur(nums, n, target);
-    return {first, second};
-}
-
-
-// ===================================================================================================================================================
-//7. Count Occurrences in Sorted Array
-// ---------- Optimal Solution ----------
-int firstoccur(vector<int>& nums, int n, int target){
-    int low=0, high=n-1, first=-1;
-    while(low<=high){
-        int mid=(low+high)/2;
-        if(nums[mid]==target){
-            first=mid;
-            high=mid-1;
-        }
-        else if(nums[mid]<target){
-            low=mid+1;
-        }
-        else{
-            high=mid-1;
-        }
-    }
-    return first;
-}
-int secondoccur(vector<int>& nums, int n, int target){
-    int low=0, high=n-1, second=-1;
-    while(low<=high){
-        int mid=(low+high)/2;
-        if(nums[mid]==target){
-            second=mid;
-            low=mid+1;
-        }
-        else if(nums[mid]<target){
-            low=mid+1;
-        }
-        else{
-            high=mid-1;
-        }
-    }
-    return second;
-}
-int cout_occur_optimal(vector<int>& nums, int target){
-    /*TC - O(2*logN)
-      SC - O(1)*/
-    int n=nums.size();
-    int first = firstoccur(nums, n, target);
-    int second = secondoccur(nums, n, target);
-    return (second-first+1);
-}
-
-
-// ===================================================================================================================================================
-//8. Search Element in a Rotated Sorted Array
-int search(vector<int>& nums, int target) {
-    /*TC - O(logN)
-      SC - O(1)*/
-    int n=nums.size();
-    int low=0, high=n-1;
-    while(low<=high){
-        int mid=(low+high)/2;
-        if(nums[mid]==target) return mid;
-        if(nums[low]<=nums[mid]){
-            if(nums[low]<=target && nums[mid]>=target){
-                high=mid-1;
-            }
-            else    low=mid+1;
-        }
-        else{
-            if(nums[mid]<=target && nums[high]>=target){
-                low=mid+1;
-            }
-            else    high=mid-1;
+    if(bloomDay.size()<m*k) return -1;
+    int mini = *min_element(bloomDay.begin(), bloomDay.end());
+    int maxi = *max_element(bloomDay.begin(), bloomDay.end());
+    for(int i=mini;i<=maxi;i++){
+        if(possible(bloomDay, m, k, i)==true){
+            return i;
         }
     }
     return -1;
+}
+
+// ---------- Optimal Solution ----------
+bool possible(vector<int>& bloomDay, int m, int k, int day){
+    int cnt=0;
+    int ans=0;
+    for(int i=0;i<bloomDay.size();i++){
+        if(bloomDay[i]<=day){
+            cnt++;
+        }
+        else{
+            ans+=cnt/k;
+            cnt=0;
+        }
+    }
+    ans+=cnt/k;
+    if(ans>=m)  return true;
+    return false;
+}
+int minDays(vector<int>& bloomDay, int m, int k) {
+    /*TC - O(logN)
+      SC - O(1)*/
+    if(bloomDay.size()<(long long)m*k) return -1;
+    int low = *min_element(bloomDay.begin(), bloomDay.end());
+    int high = *max_element(bloomDay.begin(), bloomDay.end());
+    while(low<=high){
+        int mid=(low+high)/2;
+        if(possible(bloomDay, m, k, mid)==true){
+            high=mid-1;
+        }
+        else{
+            low=mid+1;
+        }
+    }
+    return low;
+}
+// ===================================================================================================================================================
+//5. Find the smallest divisor
+// ---------- Brute Solution [Time Limit Exceeded]----------
+bool summation(vector<int>& nums, int threshold, int div){
+    int sum=0;
+    for(int j=0;j<nums.size();j++){
+        sum+= ceil((double)nums[j]/div);
+    }
+    if(sum<=threshold)  return true;
+    return false;
+}
+int smallestDivisor(vector<int>& nums, int threshold) {
+    /*TC - O(N*(max element of piles))
+      SC - O(1)*/
+    if(nums.size()>threshold)   return -1;
+    int high = *max_element(nums.begin(), nums.end());
+    for(int i=1;i<=high;i++){
+        if(summation(nums, threshold, i)==true){
+            return i;
+        }
+    }
+    return -1;
+}
+
+// ---------- Optimal Solution ----------
+bool summation(vector<int>& nums, int threshold, int div){
+    int sum=0;
+    for(int j=0;j<nums.size();j++){
+        sum+= ceil((double)nums[j]/div);
+    }
+    if(sum<=threshold)  return true;
+    return false;
+}
+int smallestDivisor(vector<int>& nums, int threshold) {
+    /*TC - O(N*log(max element))
+      SC - O(1)*/
+    if(nums.size()>threshold)   return -1;
+    int low=1;
+    int high = *max_element(nums.begin(), nums.end());
+    while(low<=high){
+        int mid=(low+high)/2;
+        if(summation(nums, threshold, mid)==true){
+            high = mid -1;
+        }
+        else{
+            low = mid+1;
+        }
+    }
+    return low;
+}
+
+
+// ===================================================================================================================================================
+//6. Capacity To Ship Packages Within D Days
+// ---------- Brute Solution [Time Limit Exceeded]----------
+int reqdays(vector<int>& weights, int wt){
+    int days=1, load=0;
+    for(int i=0;i<weights.size();i++){
+        if(wt<load+weights[i]){
+            days++;
+            load=weights[i];
+        }
+        else{
+            load+=weights[i];
+        }
+    }
+    return days;
+}
+int shipWithinDays(vector<int>& weights, int days) {
+    /*TC - O(N*(Max element - summation + 1))
+      SC - O(1)*/
+    int low = *max_element(weights.begin(), weights.end());
+    int high = accumulate(weights.begin(), weights.end(),0);
+    for(int i=low;i<=high;i++){
+        if(reqdays(weights, i) <= days){
+            return i;
+        }
+    }
+    return -1;
+}
+
+// ---------- Optimal Solution ----------
+int reqdays(vector<int>& weights, int wt){
+    int days=1, load=0;
+    for(int i=0;i<weights.size();i++){
+        if(wt<load+weights[i]){
+            days++;
+            load=weights[i];
+        }
+        else{
+            load+=weights[i];
+        }
+    }
+    return days;
+}
+int shipWithinDays(vector<int>& weights, int days) {
+    /*TC - O(N*log(Max element - summation + 1))
+      SC - O(1)*/
+    int low = *max_element(weights.begin(), weights.end());
+    int high = accumulate(weights.begin(), weights.end(),0);
+    while(low<=high){
+        int mid = (low+high)/2;
+        if(reqdays(weights, mid) <= days){
+            high=mid-1;
+        }
+        else{
+            low=mid+1;
+        }
+    }
+    return low;
+}
+
+
+// ===================================================================================================================================================
+//7. Kth Missing Positive Number
+// ---------- Brute Solution ----------
+int findKthPositive(vector<int>& arr, int k) {
+    /*TC - O(N)
+      SC - O(1)*/
+    for(int i=0;i<arr.size();i++){
+        if(k>=arr[i])    k++;
+    }
+    return k;
+}
+
+// ---------- Optimal Solution ----------
+int findKthPositive(vector<int>& arr, int k) {
+    /*TC - O(N*log(N))
+      SC - O(1)*/
+    int low=0;
+    int high=arr.size()-1;
+    while(low<=high){
+        int mid=(low+high)/2;
+        int missing = arr[mid]-(mid+1);
+        if(missing<k)   low=mid+1;
+        else    high = mid-1;
+    }
+    return low+k;
+}
+
+
+// ===================================================================================================================================================
+//8. Aggressive Cows
+// ---------- Brute Solution [Time Limit Exceeded]----------
+bool canweplace(vector<int>& position, int dist, int m){
+        int placed=1, lastcord=position[0];
+        for(int i=1;i<position.size();i++){
+            if(position[i]-lastcord >= dist){
+                placed++;
+                lastcord=position[i];
+                if(placed>=m)    return true;
+            }
+        }
+        return false;
+    }
+    int maxDistance(vector<int>& position, int m) {
+    /*TC - O(NlogN) + O(N *(max(position[])-min(position[])))
+    SC - O(1)*/
+    sort(position.begin(), position.end());
+    int n=position.size();
+    int low=1, high=position[n-1]-position[0];
+    for(int i=low;i<=high;i++){
+        if(canweplace(position, i, m)==true){
+            continue;
+        }
+        else{
+            return i-1;
+        }
+    }
+    return -1;
+}
+// ---------- Optimal Solution ----------
+bool canweplace(vector<int>& position, int dist, int m){
+    int placed=1, lastcord=position[0];
+    for(int i=1;i<position.size();i++){
+        if(position[i]-lastcord >= dist){
+            placed++;
+            lastcord=position[i];
+            if(placed>=m)    return true;
+        }
+    }
+    return false;
+}
+int maxDistance(vector<int>& position, int m) {
+    /*TC - O(NlogN) + O(N * log(max(stalls[])-min(stalls[])))
+    SC - O(1)*/
+    sort(position.begin(), position.end());
+    int n=position.size();
+    int low=1, high=position[n-1]-position[0];
+    while(low<=high){
+        int mid=(low+high)/2;
+        if(canweplace(position, mid, m)==true){
+            low=mid+1;
+        }
+        else    high=mid-1;
+    }
+    return high;
 }
 
 
