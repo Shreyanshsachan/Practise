@@ -289,8 +289,17 @@ vector<int> union1(vector<int>& nums, vector<int>& nums1){
 
 // ===================================================================================================================================================
 //10. Find the Missing Number
-// ---------- Approach 1- Using Map ----------
-
+int missingNumber(vector<int>& nums) {
+    /*TC - O(N)
+    SC - O(1)*/
+    int N = nums.size();
+    int sum = N*(N+1)/2;
+    int sum2=0;
+    for(int i=0;i<N;i++){
+        sum2+=nums[i];
+    }
+    return sum-sum2;
+}
 
 // ===================================================================================================================================================
 //11. Count Maximum Consecutive One's in the array
